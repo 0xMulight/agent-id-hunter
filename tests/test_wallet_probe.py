@@ -31,4 +31,13 @@ class WalletProbeTests(unittest.TestCase):
   res=p.probe("status",runner=runner,found=lambda which:"/usr/bin/baw")
   self.assertFalse(res["ok"])
   self.assertIn("not connected",res["error"])
+ def test_wallet_output_redacts_secrets_recursively(self):
+  result=p.redact({"success":True,"data":{"accessToken":"abc","refresh_token":"xyz","clientId":"private","walletAddress":"0x123","nested":[{"apiKey":"secret","dailyLimit":100}]}})
+  self.assertEqual(result["data"]["accessToken"],"[REDACTED]")
+  self.assertEqual(result["data"]["refresh_token"],"[REDACTED]")
+  self.assertEqual(result["data"]["clientId"],"[REDACTED]")
+  self.assertEqual(result["data"]["nested"][0]["apiKey"],"[REDACTED]")
+  self.assertEqual(result["data"]["walletAddress"],"0x123")
+  self.assertEqual(result["data"]["nested"][0]["dailyLimit"],100)
+
 if __name__=="__main__":unittest.main()
