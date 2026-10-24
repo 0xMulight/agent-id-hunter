@@ -1,0 +1,40 @@
+name: Agent ID Hunter scout
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '12 */6 * * *'
+permissions:
+  contents: read
+  issues: write
+jobs:
+  scan:
+    if: github.event_name == 'workflow_dispatch' || vars.ENABLE_AGENT_ID_WATCH == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Restore previous scan baseline
+        uses: actions/cache@v4
+        with:
+          path: data/watch-state.json
+          key: agent-id-watch-state-${{ github.run_id }}
+          restore-keys: |
+            agent-id-watch-state-
+      - name: Run read-only official-site scan
+        run: python scripts/scout.py scan
+      - name: Save report as run artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-id-report
+          path: |
+            data/latest-report.md
+            data/latest-items.json
+      - name: Create GitHub Issue for new direct Agent ID leads
+        if: vars.ENABLE_AGENT_ID_ALERTS == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python scripts/notify.py --input data/latest-items.json
