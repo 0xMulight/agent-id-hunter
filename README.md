@@ -35,6 +35,22 @@ python scripts/scout.py scan
 
 输出保存在忽略提交的 `data/` 目录中。扫码只读，不等于全网实时搜索；动态站点和 X 首发内容可能漏掉。
 
+### 直接给项目链接（新手推荐）
+
+你只需要提供 **项目官网链接**，有预算的话再附一个 BNB 上限。Hunter 会先创建一份**没有任何臆测价格、合约和资格**的研究草稿：
+
+```bash
+python scripts/quickstart.py --url https://example.com/mint --budget-bnb 0.02
+```
+
+然后让支持文件操作和联网检索的 AI 核对官网、补全 `data/mint-my-plan.json`，运行：
+
+```bash
+python scripts/mint_preflight.py --plan data/mint-my-plan.json
+```
+
+这个步骤不会自动抓取合约，也不会发交易；首次运行应该提示资料不足。**若要真实钱包预览，必须额外安装 Binance 官方 Agentic Wallet Skill，并完成自己账户的配对。**
+
 ### 用 AI 帮你打新 / Mint
 
 不要把截图里的旧项目当成还在开放的 Mint。把新项目官网链接交给 AI，先让它核实官方规则、合约和成本，再考虑是否使用钱包。
