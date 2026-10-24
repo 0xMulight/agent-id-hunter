@@ -7,6 +7,18 @@ Agent ID Hunter 的作用是把 **发现活动 → 核实规则 → 钱包预检
 - https://github.com/binance/binance-skills-hub/blob/main/skills/binance-web3/binance-agentic-wallet/references/external-sign.md
 - https://developers.binance.com/en/docs/products/agentic-wallet/welcome
 
+## 一条项目链接开始（推荐）
+
+不用先填一大堆 JSON。用户把项目官网链接交给 AI，AI 可以用本地纯只读命令初始化待核验草稿：
+
+    python scripts/quickstart.py --url https://example.com/mint --budget-bnb 0.02
+
+然后根据真实官网与合约信息补全 `data/mint-my-plan.json`，再执行：
+
+    python scripts/mint_preflight.py --plan data/mint-my-plan.json
+
+**请勿把 0 wei 当成免费 Mint 的默认值。** 缺少真实价格、付款币种、合约函数或 Gas 报价时只能等待补充。用户自己输入的 Gas 预算不是钱包的实际报价；需要通过官方 preview 获取链上模拟和安全结果。
+
 ## 1. 三种使用模式
 
 | 模式 | 任务 | 需要钱包 |
