@@ -2,6 +2,7 @@
 """Read-only diagnostics of installed Binance Agentic Wallet CLI."""
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -12,6 +13,16 @@ SAFE_COMMANDS = {
     "address": ["baw", "wallet", "address", "--json"],
     "gas": ["baw", "wallet", "gas-price", "--json"],
 }
+SENSITIVE_KEYS = re.compile(r"^(?:(?:access|refresh|id|session|auth)?token|privatekey|seedphrase|mnemonic|password|secret|clientid|apikey|apisecret|jwt|authorization|cookie|bearer)$", re.I)
+
+def redact(data):
+    """Hide credential-like fields before the CLI output reaches an AI conversation."""
+    if isinstance(data, dict):
+        return {k: "[REDACTED]" if SENSITIVE_KEYS.fullmatch(re.sub(r"[^a-zA-Z0-9]", "", str(k))) else redact(v) for k, v in data.items()}
+    if isinstance(data, list):
+        return [redact(v) for v in data]
+    return data
+
 INSTALL = "npx skills add binance/binance-skills-hub/skills/binance-web3/binance-agentic-wallet"
 
 def probe(which, runner=subprocess.run, found=shutil.which):
@@ -30,7 +41,7 @@ def probe(which, runner=subprocess.run, found=shutil.which):
         data=json.loads(proc.stdout)
     except json.JSONDecodeError:
         return {"ok": False, "error": "钱包 CLI 没有返回有效 JSON"}
-    return {"ok": True, "command": which, "result": data}
+    return {"ok": True, "command": which, "result": redact(data)}
 
 def main(argv=None):
     parser=argparse.ArgumentParser()
