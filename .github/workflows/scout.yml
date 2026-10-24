@@ -3,12 +3,21 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '12 */6 * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/scout.yml'
+      - 'scripts/scout.py'
+      - 'scripts/notify.py'
+      - 'config/sources.json'
 permissions:
   contents: read
   issues: write
+concurrency:
+  group: agent-id-scout
+  cancel-in-progress: false
 jobs:
   scan:
-    if: github.event_name == 'workflow_dispatch' || vars.ENABLE_AGENT_ID_WATCH == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +42,7 @@ jobs:
             data/latest-report.md
             data/latest-items.json
       - name: Create GitHub Issue for new direct Agent ID leads
-        if: vars.ENABLE_AGENT_ID_ALERTS == 'true'
+        if: github.event_name == 'schedule' || github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
