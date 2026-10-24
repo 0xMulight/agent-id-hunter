@@ -43,23 +43,23 @@ python scripts/scout.py scan
 
 币安官方钱包 Skill（Hunter 不会替你安装或配对钱包）：
 
-`bash
+```bash
 npx skills add binance/binance-skills-hub/skills/binance-web3/binance-agentic-wallet
-`
+```
 
 检查钱包，只执行只读请求：
 
-`bash
+```bash
 python scripts/wallet_probe.py status
 python scripts/wallet_probe.py settings
 python scripts/wallet_probe.py address
-`
+```
 
 Mint 参数预检（先复制示例活动卡，再补入真实官方数据）：
 
-`bash
+```bash
 python scripts/mint_preflight.py --plan examples/mint-plan.example.json
-`
+```
 
 示例中的合约地址和活动信息故意留空，脚本应返回 NEEDS_REVIEW。**这是防止用户把演示参数拿去付款。** 真正钱包 execute 的命令不在 Hunter 的 Python 脚本里，而由官方 Wallet Skill 在逐笔核对并获得明确确认后执行。
 
