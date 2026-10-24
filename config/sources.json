@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {"name": "Binance 新闻与公告索引", "kind": "index", "url": "https://www.binance.com/en/press"},
+    {"name": "BNB Chain 官方博客", "kind": "index", "url": "https://www.bnbchain.org/en/blog"},
+    {"name": "Four.meme AI Agent 专题", "kind": "page", "url": "https://four.meme/en/agentic"},
+    {"name": "BNB Chain AI Agent 专题", "kind": "page", "url": "https://www.bnbchain.org/en/solutions/ai-agent"}
+  ]
+}
