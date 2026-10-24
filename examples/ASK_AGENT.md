@@ -5,7 +5,7 @@
 > 帮我研究这个项目是否仍开放 Mint：{项目官网链接}。请先使用 Agent ID Hunter，再按需调用币安官方 Agentic Wallet Skill。
 >
 > 1. 核对真实官网、活动是否开放、参与身份（.ai 是否必要）、报名/钱包/快照规则。
-> 2. 找到项目官方公布的合约地址和区块浏览器链接，核对正确的 Mint 方法、报价、Gas 与总预算。缺少官方参数就停。
+> 2. 我只提供项目链接，你先用 `scripts/quickstart.py` 建待核验草稿，不要预填合约或假报价。找到官方合约地址和区块浏览器链接，再核对 Mint 方法、付款币种、报价、Gas 与总预算。缺少官方参数就停。
 > 3. 我如果已经配对 Agentic Wallet，先只读钱包 status、settings、address，不要执行交易。
 > 4. 生成 Mint 预检报告，条件具备后才调用币安钱包 contract-call preview，并告诉我模拟结果与风险。
 > 5. 在我明确确认预览中的具体合约、金额、数量、手续费和授权范围前，不要 execute、approve、swap、transfer、sign-message 或发送任何资产。
