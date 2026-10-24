@@ -11,7 +11,7 @@ class ChecklistTests(unittest.TestCase):
     def test_unknown_does_not_require_agent_id(self):
         text=checklist.build(CARD)
         self.assertIn("尚不明确",text)
-        self.assertNotIn("Flux",text)
+        self.assertNotIn("hardcoded-user.ai",text)
     def test_no_ai_requirement_does_not_ask_for_ai(self):
         text=checklist.build({**CARD,"ai_requirement":"none"})
         self.assertIn("跳过 .ai 身份检查",text)
