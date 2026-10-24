@@ -10,6 +10,7 @@ BASE = {
  "official_rules_verified":True,"official_contract_verified":True,
  "contract_address":"0x"+"a"*40,"input_data":"0x1234","quantity":1,
  "ai_requirement":"none","approval_needed":False,
+ "payment_asset":"BNB","payment_value_verified":True,
  "tx_value_wei":"1000000000000000","gas_cap_wei":"100000000000000",
  "total_spend_cap_wei":"2000000000000000"
 }
@@ -47,5 +48,15 @@ class MintTests(unittest.TestCase):
  def test_missing_spend_cap_cannot_be_ready(self):
   p=dict(BASE);p.pop("total_spend_cap_wei")
   self.assertEqual(m.check(p)["status"],"NEEDS_REVIEW")
+
+ def test_unknown_payment_cannot_be_ready(self):
+  res=m.check({**BASE,"payment_value_verified":False})
+  self.assertEqual(res["status"],"NEEDS_REVIEW")
+ def test_erc20_payment_is_not_generic_bnb_contract_call(self):
+  res=m.check({**BASE,"payment_asset":"USDT"})
+  self.assertEqual(res["status"],"NEEDS_REVIEW")
+ def test_swap_does_not_count_as_mint_preview(self):
+  res=m.check({**BASE,"method":"swap_quote"})
+  self.assertEqual(res["status"],"NEEDS_REVIEW")
 
 if __name__=="__main__":unittest.main()
