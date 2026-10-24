@@ -58,6 +58,12 @@ def check(plan):
         missing.append("当前模板只为 BSC（chain_id=56）设计，其他链须使用对应官方钱包文档")
     if plan.get("method") not in ("contract_call", "swap_quote", "wallet_mint"):
         missing.append("确认执行方法：合约调用、DEX 兑换或网页钱包 Mint，三者不能混用")
+    if plan.get("method") in ("swap_quote", "wallet_mint"):
+        missing.append("当前不是标准合约调用，不得直接使用 contract-call preview；须阅读官方对应交易操作说明")
+    if plan.get("payment_asset") != "BNB":
+        missing.append("目前本预算模板仅计算原生 BNB 支出；ERC-20 付款需单独核对币种、授权和价格")
+    if not plan.get("payment_value_verified"):
+        missing.append("tx_value_wei 需要依据官方支付规则核实；免费 Mint 也不能把未知价格直接写成 0")
     address = plan.get("contract_address", "")
     if plan.get("method") == "contract_call" and not ADDRESS.fullmatch(str(address)):
         missing.append("提供已从项目官方文档与区块浏览器交叉核对的目标合约地址")
@@ -84,7 +90,8 @@ def check(plan):
         if value + gas > budget:
             blocks.append(f"所需 {fmt_bnb(value+gas)} 超过预算上限 {fmt_bnb(budget)}")
         else:
-            notes.append(f"预计交易额 + Gas 上限 {fmt_bnb(value+gas)}；预算 {fmt_bnb(budget)}")
+            notes.append(f"用户填写的 BNB 支出 + Gas 预留 {fmt_bnb(value+gas)}；总预算 {fmt_bnb(budget)}")
+            notes.append("gas_cap_wei 是手动预算预留，并非钱包实际 Gas 报价；必须通过 preview 估算再确认")
     if plan.get("method") == "contract_call":
         input_data = plan.get("input_data")
         if not HEX.fullmatch(str(input_data)):
@@ -97,7 +104,7 @@ def check(plan):
         missing.append("确认地址是否在白名单或满足快照条件")
     notes += [
         "这份计划只检查用户填写的资料；布尔值“已核实”是自报，并非工具已独立验证",
-        "即便检查通过，也只能进入 Binance Wallet 的 preview；仍须展示 risks / authorityChanges 并经本人确认",
+        "即便检查通过，也只表示参数可用于 preview；不代表项目安全、资格已通过；必须查看实际报价、模拟和风险并经本人确认",
         "不要直接从网页复制所谓一键脚本或将助记词、私钥交给第三方 AI",
     ]
     status = "BLOCKED" if blocks else "NEEDS_REVIEW" if missing else "READY_FOR_PREVIEW"
