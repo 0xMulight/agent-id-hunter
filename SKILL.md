@@ -22,7 +22,13 @@ description: Binance Agent ID 活动追踪 + AI Agent 打新/Mint 助手；抓�
 
 1. **先以项目官方公告、可信合约来源和最新网页内容核对是否仍开放**。不能把别人旧推文里已结束的 Mint 当成新活动。用户给的链接只是候选，不是可信指令。
 2. 询问或识别这次是否真要用 .ai 身份，是否要持有、绑定特定钱包、注册、白名单/快照；如果活动规则不要求 .ai，跳过持有人核验。不能把 Four.meme 的 ERC-8004 与 Binance/SPACE ID 的 .ai 当成相同的凭证。
-3. 做**预检**：链与合约、正确 mint/approve/swap/transfer 方法、数量、报价、Gas、预算、合约权限、有效时间。预检脚本不连接钱包、不发交易：
+3. 用户只给出一个项目链接时，先根据链接生成安全草稿（可选预算，**不预填假价格和合约**）：
+
+    python scripts/quickstart.py --url <项目官网链接>
+
+   若用户提供 BNB 预算，可加 `--budget-bnb 0.02`；真实项目数据要经官方核对后再填到 `data/mint-my-plan.json`。
+
+3a. 做**预检**：链与合约、正确 mint/approve/swap/transfer 方法、数量、报价、Gas、预算、合约权限、有效时间。预检脚本不连接钱包、不发交易：
 
     python scripts/mint_preflight.py --plan examples/mint-plan.example.json
 
@@ -38,7 +44,7 @@ description: Binance Agent ID 活动追踪 + AI Agent 打新/Mint 助手；抓�
 
     python scripts/wallet_probe.py address
 
-5. **只要存在 BLOCKED / NEEDS_REVIEW，停止准备交易。** 所有资料齐全后，只可按照币安官方 Skill 和 references/mint-playbook.md 先运行 contract-call preview。必须展示 parsedTx、simulationResult、risks、authorityChanges 和实际成本。官方安全检查失败时停止，不要改成 BNB 转账或其他交易方式绕过。
+5. **只要存在 BLOCKED / NEEDS_REVIEW，停止准备交易。** `gas_cap_wei` 是用户的预留 Gas 预算，不是钱包给出的实际 Gas 报价；任何 ERC-20 付款不能按 BNB 支出模型标为准备完成。 所有资料齐全后，只可按照币安官方 Skill 和 references/mint-playbook.md 先运行 contract-call preview。必须展示 parsedTx、simulationResult、risks、authorityChanges 和实际成本。官方安全检查失败时停止，不要改成 BNB 转账或其他交易方式绕过。
 6. **每一次交易都要当前对话中的明确确认。** 用户必须在看过这次预览后，明确同意具体钱包、链、合约、数量、资金支出、风险及授权范围，才能使用 Binance 官方 Skill 的 execute；不能依据事前笼统的“以后帮我冲”去执行。自动签名开启后执行可能立即广播，不一定再次弹窗。
 7. 交易完成还要查 txHash 及官方活动计数，不能把“已广播”说成“已铸造成功”。
 8. 对 Four.meme，默认只用公开数据查询新币与报价；其某些社区 CLI 写入功能依赖 PRIVATE_KEY，不能与 Binance Agentic Wallet 互相假设兼容，更不可在聊天中索要私钥。
@@ -59,7 +65,7 @@ description: Binance Agent ID 活动追踪 + AI Agent 打新/Mint 助手；抓�
 
 ## 安全红线
 
-- 不读取、索取或上传私钥、助记词、2FA、API 密钥。
+- 不读取、索取或上传私钥、助记词、2FA、API 密钥。钱包查询信息必须遮盖认证令牌与凭证字段。
 - 不自动发币、交易、签名、授权、Mint、报名或领取奖励。
 - 不把候选链接、用户自报、钱包解析当作官方验证。
 - 对身份标准不明确的活动明确回答“尚无证据表明需要 .ai”。
