@@ -1,0 +1,19 @@
+{
+  "id": "example-replace-me",
+  "title": "演示活动（不是真实可报名活动）",
+  "official_url": "",
+  "source_verified": false,
+  "ai_requirement": "unknown",
+  "identity_proof": "unknown",
+  "registration": "unknown",
+  "wallet_and_chain": "unknown",
+  "snapshot": "unknown",
+  "eligibility_region": "unknown",
+  "deadline_with_timezone": "unknown",
+  "reward_claim": "unknown",
+  "tasks": [
+    {"id": "read-rules", "title": "核对官方活动规则", "evidence": "官方公告链接"},
+    {"id": "check-registration", "title": "确认是否需要先报名", "evidence": "报名记录或截图"},
+    {"id": "check-counting", "title": "确认任务是否被官方计数", "evidence": "官方计数截图"}
+  ]
+}
