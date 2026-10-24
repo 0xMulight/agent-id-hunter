@@ -14,8 +14,8 @@
   "ai_ownership_verified": false,
   "allowlist_only": false,
   "approval_needed": false,
-  "tx_value_wei": "0",
-  "gas_cap_wei": "1000000000000000",
   "total_spend_cap_wei": "10000000000000000",
-  "auto_execute": false
+  "auto_execute": false,
+  "payment_asset": "BNB",
+  "payment_value_verified": false
 }
