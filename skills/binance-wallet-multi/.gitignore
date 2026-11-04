@@ -1,9 +1,0 @@
-__pycache__/
-*.py[cod]
-.baw*/
-session.json
-profiles.json
-*.lock
-.profiles-*
-.env
-.env.*

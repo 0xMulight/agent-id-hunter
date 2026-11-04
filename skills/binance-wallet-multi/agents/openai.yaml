@@ -1,4 +1,0 @@
-interface:
-  display_name: "币安多钱包管家"
-  short_description: "保留已有登录，按编号管理多个币安 Agentic Wallet 会话"
-  default_prompt: "使用 $binance-wallet-multi 保留一号钱包，配置并核验二号钱包的独立会话。"
